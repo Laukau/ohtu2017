@@ -14,67 +14,51 @@ public class TennisGame {
 
     public void wonPoint(String playerName) {
         if (playerName == "player1")
-            m_score1 += 1;
+            m_score1++;
         else
-            m_score2 += 1;
+            m_score2++;
     }
 
     public String getScore() {
-        String score = "";
-        int tempScore=0;
-        if (m_score1==m_score2)
-        {
-            switch (m_score1)
-            {
-                case 0:
-                        score = "Love-All";
-                    break;
-                case 1:
-                        score = "Fifteen-All";
-                    break;
-                case 2:
-                        score = "Thirty-All";
-                    break;
-                case 3:
-                        score = "Forty-All";
-                    break;
-                default:
-                        score = "Deuce";
-                    break;
-                
-            }
+        String score;
+
+        if (m_score1 == m_score2) {
+            score = scoresEven();
         }
-        else if (m_score1>=4 || m_score2>=4)
-        {
-            int minusResult = m_score1-m_score2;
-            if (minusResult==1) score ="Advantage player1";
-            else if (minusResult ==-1) score ="Advantage player2";
-            else if (minusResult>=2) score = "Win for player1";
-            else score ="Win for player2";
+        else if (m_score1>=4 || m_score2>=4) {
+            score = anotherOneLeadingWithOverThreeBallsWon();
         }
-        else
-        {
-            for (int i=1; i<3; i++)
-            {
-                if (i==1) tempScore = m_score1;
-                else { score+="-"; tempScore = m_score2;}
-                switch(tempScore)
-                {
-                    case 0:
-                        score+="Love";
-                        break;
-                    case 1:
-                        score+="Fifteen";
-                        break;
-                    case 2:
-                        score+="Thirty";
-                        break;
-                    case 3:
-                        score+="Forty";
-                        break;
-                }
-            }
+        else {
+            score = getPlayersScoreWhenMaxThree(m_score1) + "-" + getPlayersScoreWhenMaxThree(m_score2);
         }
+
+        return score;
+    }
+
+    public String getPlayersScoreWhenMaxThree(int ballsWon) {
+        String[] specialScoreTypes = {"Love", "Fifteen", "Thirty", "Forty"};
+        return specialScoreTypes[ballsWon];
+    }
+
+    public String scoresEven() {
+        String score = "Deuce";
+        String[] specialDeuceTypes = {"Love-All", "Fifteen-All", "Thirty-All", "Forty-All"};
+
+        if(m_score1 < 4) {
+            score = specialDeuceTypes[m_score1];
+        }
+        return score;
+    }
+
+    public String anotherOneLeadingWithOverThreeBallsWon() {
+        String score;
+        int difference = m_score1-m_score2;
+
+        if (difference==1) score = "Advantage player1";
+        else if (difference ==-1) score = "Advantage player2";
+        else if (difference>=2) score = "Win for player1";
+        else score = "Win for player2";
+
         return score;
     }
 }

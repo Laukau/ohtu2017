@@ -115,4 +115,12 @@ public class KauppaTest {
         k.tilimaksu("pekka", "12345");
         verify(viite, times(3)).uusi();
     }
+
+    @Test
+    public void metodiPoistaKoristaPalauttaaTuotteenVarastoon() {
+        k.aloitaAsiointi();
+        k.lisaaKoriin(1);
+        k.poistaKorista(1);
+        verify(varasto, times(1)).palautaVarastoon(any(Tuote.class));
+    }
 }
